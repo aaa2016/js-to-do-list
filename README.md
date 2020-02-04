@@ -1,2 +1,3 @@
-# js-to-do-list
- JavaScript To Do List
+# JavaScript To Do List
+
+Work in progress

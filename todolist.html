@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <title id="pageTitle">To Do List</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="Artur A.">
+
+	<script src="todolist.js"></script>
+
+	<style>
+		body {font-family: sans-serif}
+		h1, h2, h3, noscript, form, p {text-align: center}
+	</style>
+
+  </head>
+
+  <body onload="checkCookie()">
+  <h1>To Do List</h2>
+	<form>
+		<input type="text" id="inputItem" />
+		<button type="button" onclick="addItem()">Add item</button> 
+		<button type="button" onclick="deleteAll()">Delete all items</button> 
+	</form>
+	<div id="list-area"></div>
+  </body>
+</html>
