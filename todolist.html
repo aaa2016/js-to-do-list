@@ -11,17 +11,37 @@
 
 	<style>
 		body {font-family: sans-serif}
-		h1, h2, h3, noscript, form, p {text-align: center}
+		h1, noscript, form, p {text-align: center; color: #555555}
+		a {padding: 5px; color: red; text-decoration: none;}
+		.button {
+ 			 background-color: #555555;
+ 			 border: none;
+ 			 color: white;
+ 			 padding: 5px 10px;
+ 			 text-align: center;
+ 			 text-decoration: none;
+ 			 display: inline-block;
+ 			 border-radius: 4px;
+		}
+		input[type=text] {
+  			border: 2px solid #555555;
+  			border-radius: 4px;
+  			padding: 5px 10px;
+		}
+		.list-item {
+			font-weight: bold;
+		}
 	</style>
 
   </head>
 
   <body onload="checkCookie()">
-  <h1>To Do List</h2>
-	<form>
+  <h1>To Do List</h1>
+	<form onSubmit="addItem()">
 		<input type="text" id="inputItem" />
-		<button type="button" onclick="addItem()">Add item</button> 
-		<button type="button" onclick="deleteAll()">Delete all items</button> 
+		<button type="button" class="button" onclick="addItem()">Add item</button> 
+		<button type="button" class="button" onclick="deleteAll()">
+			Delete all items</button> 
 	</form>
 	<div id="list-area"></div>
   </body>
