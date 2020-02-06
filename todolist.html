@@ -35,12 +35,13 @@
 
   </head>
 
-  <body onload="checkCookie()">
+  <body onload="checkCookie();keyListener()">
   <h1>To Do List</h1>
-	<form onSubmit="addItem()">
-		<input type="text" id="inputItem" />
-		<button type="button" class="button" onclick="addItem()">Add item</button> 
-		<button type="button" class="button" onclick="deleteAll()">
+	<form onSubmit="return false">
+		<input type="text" id="inputItem" value="" />
+		<button type="button" class="button" id="addButton" onclick="addItem()">
+			Add item</button> 
+		<button type="button" class="button" id="deleteButton" onclick="deleteAll()">
 			Delete all items</button> 
 	</form>
 	<div id="list-area"></div>

@@ -1,5 +1,33 @@
+// array to contain list of items
 var items = [];
 
+/**
+*	Sets up listener for Enter key when in text field (runs via onLoad)
+*/
+function keyListener() {
+
+	// Get the input field
+	var input = document.getElementById("inputItem");
+
+	// This is borrowed from:
+	//		https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
+	
+	// Execute a function when the user releases a key on the keyboard
+	input.addEventListener("keyup", function(event) {
+  		// Number 13 is the "Enter" key on the keyboard
+  		if (event.keyCode === 13) {
+    		// Cancel the default action, if needed
+    		event.preventDefault();
+    		// Trigger the button element with a click
+    		document.getElementById("addButton").click();
+  		}
+	}); 
+	
+}
+
+/**
+*	Checks for existing cookie and draws list of items (runs via onLoad)
+*/
 function checkCookie() {
 	if (getCookie("items") != "") {
 		//window.alert("Cookie is: "+document.cookie);
@@ -8,8 +36,12 @@ function checkCookie() {
 		items = itemsString.split(",");
 		drawList(items);
 	}
+
 }
 
+/**
+*	Adds new item to the cookie
+*/
 function addItem() {
 
 	// take input string, if input not blank
@@ -20,8 +52,8 @@ function addItem() {
 		// add to array of items
 		items.push(item);
 	
-		// set cookie - TODO properly
-		//setCookie(items);
+		// set cookie
+		setCookie(items);
 	
 		//draw list of items
 		drawList(items);
@@ -35,6 +67,9 @@ function addItem() {
 
 }
 
+/**
+*	Draws the list of items (either when new item added or from cookie)
+*/
 function drawList(input) {
 	
 	//window.alert("Drawing list from: "+input);
@@ -51,7 +86,7 @@ function drawList(input) {
 		var delLink = document.createElement("a");
 		var linkText = document.createTextNode("X");
 		delLink.setAttribute("href","#");
-		delLink.setAttribute("onclick", "removeItem('item"+i+"'); return false");
+		delLink.setAttribute("onclick", "removeItem("+i+"); return false");
 		delLink.appendChild(linkText);
 		p.appendChild(delLink);
 		
@@ -65,25 +100,54 @@ function drawList(input) {
 	
 }
 
+/**
+*	Deletes specific item via the deletion link (from list and cookie)
+*/
 function removeItem(n) {
 
-	var itemToDelete = document.getElementById(n);
+	// list items have ids in format "item0"
+	var itemToDelete = document.getElementById("item"+n);
 	
+	// delete all child nodes - TODO: doesn't seem to delete actual p element
 	while (itemToDelete.firstChild) {
     	itemToDelete.removeChild(itemToDelete.firstChild);
   	}
   	
-  	// TODO: delete entry in cookie
+  	// extract cookie contents again
+  	if (getCookie("items") != "") {
+		//window.alert("Cookie is: "+document.cookie);
+		itemsString = getCookie("items");
+		//window.alert("Items in cookie are: "+itemsString);
+		var itemsPreDel = itemsString.split(",");
+		
+		var itemsPostDel = [];
+		
+		// copy each array element to new array, except the one being deleted
+		for (i=0; i<itemsPreDel.length; i++){
+			if (i != n) {
+				itemsPostDel.push(itemsPreDel[i]);
+			}
+		}
+		
+		// re-set cookie with the new array
+		setCookie(itemsPostDel);
+	}
 
 }
 
+/**
+*	Deletes all items and clear cookie
+*/
 function deleteAll() {
 
-	// clear the list area
+	// clear the list area and chil nodes
 	var listArea = document.getElementById("list-area");
   	while (listArea.firstChild) {
     	listArea.removeChild(listArea.firstChild);
   	}
+	
+	// clear input field
+	document.getElementById("inputItem").value = "";
 	
 	// clear array
 	items = [];
@@ -93,6 +157,9 @@ function deleteAll() {
 
 }
 
+/**
+*	Creates new cookie
+*/
 function setCookie(input) {
 	
 	// set cookie expiry date to maximum future date (32 bit)
@@ -101,7 +168,7 @@ function setCookie(input) {
 }
 
 function getCookie(cname) {
-	// This is borrowed from W3C Schools: https://www.w3schools.com/js/js_cookies.asp
+	// This is borrowed from: https://www.w3schools.com/js/js_cookies.asp
 	var name = cname + "=";
 	var decodedCookie = decodeURIComponent(document.cookie);
 	var ca = decodedCookie.split(';');
@@ -117,6 +184,9 @@ function getCookie(cname) {
   return "";
 }
 
+/**
+*	Deletes cookie completely
+*/
 function deleteCookie() {
 
 	// set cookie expiry to past date
