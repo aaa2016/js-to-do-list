@@ -167,6 +167,9 @@ function setCookie(input) {
 
 }
 
+/**
+*	Obtain cookie contents
+*/
 function getCookie(cname) {
 	// This is borrowed from: https://www.w3schools.com/js/js_cookies.asp
 	var name = cname + "=";
