@@ -27,6 +27,10 @@ function keyListener() {
 
 /**
 *	Checks for existing cookie and draws list of items (runs via onLoad)
+*
+*	TODO: cookie seems to persist when refreshing page, but not when page in closed
+*		and reopened - storage says cookie still exists but for some reason isn't
+*		read
 */
 function checkCookie() {
 	if (getCookie("items") != "") {
@@ -35,8 +39,26 @@ function checkCookie() {
 		//window.alert("Items in cookie are: "+itemsString);
 		items = itemsString.split(",");
 		drawList(items);
+	} else {
+		// debugging only
+		//window.alert("No cookies. Cookie is: "+document.cookie);
 	}
 
+}
+
+/**
+*	Lists all cookies (for debugging only)
+*	Borrowed from:
+*	https://stackoverflow.com/questions/3400759/
+		how-can-i-list-all-cookies-for-the-current-page-with-javascript
+*/
+function listCookies() {
+    var theCookies = document.cookie.split(';');
+    var aString = '';
+    for (var i = 1 ; i <= theCookies.length; i++) {
+        aString += i + ' ' + theCookies[i-1] + "\n";
+    }
+    window.alert("Listed cookies: " + aString);
 }
 
 /**
@@ -72,6 +94,10 @@ function addItem() {
 */
 function drawList(input) {
 	
+	// clear existing list - a slight workaround for issues with getting all items to
+	//   appear correctly from both checkCookie() and addItem()
+	deleteNodes();
+	
 	//window.alert("Drawing list from: "+input);
 	
 	// for each element in the array, create a new p element
@@ -90,13 +116,9 @@ function drawList(input) {
 		delLink.appendChild(linkText);
 		p.appendChild(delLink);
 		
-		// TODO: fix - when using cookie, only draws last item
-		
+		var listArea = document.getElementById("list-area");
+		listArea.appendChild(p); 
 	}
-	
-	// add elements to list area
-	var listArea = document.getElementById("list-area");
-	listArea.appendChild(p); 
 	
 }
 
@@ -132,6 +154,19 @@ function removeItem(n) {
 		// re-set cookie with the new array
 		setCookie(itemsPostDel);
 	}
+
+}
+
+/**
+*	Deletes list items (but not cookies or storage array)
+*/
+function deleteNodes() {
+
+	// clear the list area and chil nodes
+	var listArea = document.getElementById("list-area");
+  	while (listArea.firstChild) {
+    	listArea.removeChild(listArea.firstChild);
+  	}
 
 }
 
